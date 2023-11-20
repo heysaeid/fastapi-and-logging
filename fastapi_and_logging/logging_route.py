@@ -3,6 +3,9 @@ from typing import Callable, Coroutine
 from fastapi import Request, Response
 from fastapi.routing import APIRoute
 from user_agents.parsers import parse
+from fastapi_and_logging.enums import LogTypeEnum
+from fastapi_and_logging.logging import get_incoming_logger
+
 
 
 class LoggingRoute(APIRoute): 
@@ -11,6 +14,7 @@ class LoggingRoute(APIRoute):
     get_request_data: Callable[..., Coroutine]
     get_response_data: Callable
     log_builder: Callable
+    log_type: LogTypeEnum
             
     def get_route_handler(self) -> Callable:
         original_route_handler = super().get_route_handler()
@@ -26,7 +30,7 @@ class LoggingRoute(APIRoute):
             duration = (end_time - start_time) * 1000
             
             user_agent = parse(request.headers["user-agent"])
-            log = LoggingRoute.log_builder(
+            log_dict = LoggingRoute.log_builder(
                 request = request,
                 request_data = await LoggingRoute.get_request_data(request),
                 response = response,
@@ -36,6 +40,7 @@ class LoggingRoute(APIRoute):
                 end_time = end_time,
                 duration = duration,
             )
+            get_incoming_logger(bind_data=log_dict, log_type=LoggingRoute.log_type)
             return response
         
         return custom_route_handler

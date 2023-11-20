@@ -1,24 +1,33 @@
-from fastapi import FastAPI
-from fastapi_and_logging.helpers import log_builder, get_request_data, get_response_data
-from fastapi_and_logging.logging_route import LoggingRoute
+import json
+from loguru import FormatFunction, logger
+from fastapi_and_logging.enums import LogTypeEnum
 
 
+def create_logger(name: str, file_path: str, **kwargs):
+    logger.remove()
+    logger.bind(name=name)
+    logger.add(file_path, **kwargs)
+    return logger
 
-class FastAPIIncomingLog:
-    
-    def __init__(
-        self, 
-        app: FastAPI = None,
-        request_id_builder = None,
-        log_builder = log_builder,
-        get_request_data = get_request_data,
-        get_response_data = get_response_data,
-        response_max_len: int = 5000,
-    ) -> None:
-        self.app = app
-        LoggingRoute.response_max_len = response_max_len
-        LoggingRoute.request_id_builder = request_id_builder
-        LoggingRoute.get_request_data = get_request_data
-        LoggingRoute.get_response_data = get_response_data
-        LoggingRoute.log_builder = log_builder
-        self.app.router.route_class = LoggingRoute
+def incoming_formatter(record: dict):
+    record["extra"]["serialized"] = json.dumps(record["extra"]["data"], default=str)
+    return "{extra[serialized]}\n"
+
+def get_incoming_logger(
+    file_path: str = "incoming.log", 
+    enqueue: bool = True, 
+    bind_data: dict = {},
+    message: str = "Incoming request",
+    format: FormatFunction = incoming_formatter,
+    log_type: LogTypeEnum = LogTypeEnum.FILE,
+):
+    if log_type == LogTypeEnum.FILE:     
+        incoming_logger = create_logger(
+            name = "incoming",
+            file_path = file_path,
+            enqueue = enqueue,
+            format = format,
+        )
+        incoming_logger.bind(data=bind_data).info(message)
+    elif log_type == LogTypeEnum.CONSOLE:
+        logger.bind(**bind_data).info(message)
