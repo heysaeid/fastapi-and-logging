@@ -1,5 +1,5 @@
 # fastapi-and-logging
-![FastAPI And Logging](https://raw.githubusercontent.com/heysaeid/fastapi-and-logging/main/docs/img/Color%20logo%20with%20background.svg?token=GHSAT0AAAAAACKL66NW3EGUQNEBNWWN7XHSZK3JVAA)
+![FastAPI And Logging](https://raw.githubusercontent.com/heysaeid/fastapi-and-logging/main/docs/img/Color%20logo%20with%20background.svg)
 
 
 FastAPI-and-Logging simplifies log handling, allowing for effective organization, tracking, and analysis of logs in FastAPI applications, aiding in debugging and issue resolution.
@@ -45,6 +45,7 @@ The provided default functions (`get_request_data`, `get_response_data`, and `lo
 This function is responsible for extracting and formatting request data.
 
 ```python
+from fastapi_and_logging import Request
 from fastapi_and_logging.helpers import get_request_data
 
 
@@ -52,7 +53,6 @@ async def customize_get_request_data(request: Request):
     # You can also use the output of the default function
     data = await get_request_data(request)
     return data
-    
 ```
 
 ## `get_response_data`
