@@ -1,5 +1,6 @@
 import json
 from fastapi import Request, Response
+from fastapi.responses import StreamingResponse
 from user_agents.parsers import UserAgent
 
 
@@ -13,15 +14,21 @@ async def get_request_data(request: Request):
     return ""
     
     
-def get_response_data(body: bytes) -> dict | str:
+def get_response_data(response: Response) -> dict | str:
     response_max_len = 1000
-    if len(body) < response_max_len:
-        try:
-            response_data = json.loads(body)
-        except json.JSONDecodeError as e:
+    
+    if not isinstance(response, StreamingResponse):
+        body = response.body
+        if len(body) < response_max_len:
+            try:
+                response_data = json.loads(response.body)
+            except Exception as e:
+                response_data = str(body)[response_max_len:]
+        else:
             response_data = str(body)[response_max_len:]
     else:
-        response_data = str(body)[response_max_len:]
+        response_data = "StreamingResponse"
+    
     return response_data
 
 

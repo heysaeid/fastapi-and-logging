@@ -34,7 +34,7 @@ class LoggingRoute(APIRoute):
                 request = request,
                 request_data = await LoggingRoute.get_request_data(request),
                 response = response,
-                response_data = LoggingRoute.get_response_data(response.body),
+                response_data = LoggingRoute.get_response_data(response),
                 user_agent = user_agent,
                 start_time = start_time,
                 end_time = end_time,
