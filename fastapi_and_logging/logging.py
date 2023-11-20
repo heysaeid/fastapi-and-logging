@@ -16,7 +16,7 @@ def incoming_formatter(record: dict):
 def get_incoming_logger(
     file_path: str = "incoming.log", 
     enqueue: bool = True, 
-    bind_data: dict = {},
+    extra_data: dict = {},
     message: str = "Incoming request",
     format = incoming_formatter,
     log_type: LogTypeEnum = LogTypeEnum.FILE,
@@ -28,6 +28,6 @@ def get_incoming_logger(
             enqueue = enqueue,
             format = format,
         )
-        incoming_logger.bind(data=bind_data).info(message)
+        incoming_logger.bind(data=extra_data).info(message)
     elif log_type == LogTypeEnum.CONSOLE:
-        logger.bind(**bind_data).info(message)
+        logger.info({"message":message, "data":extra_data})

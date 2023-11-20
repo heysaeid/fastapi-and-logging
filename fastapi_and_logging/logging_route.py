@@ -40,7 +40,7 @@ class LoggingRoute(APIRoute):
                 end_time = end_time,
                 duration = duration,
             )
-            get_incoming_logger(bind_data=log_dict, log_type=LoggingRoute.log_type)
+            get_incoming_logger(extra_data=log_dict, log_type=LoggingRoute.log_type)
             return response
         
         return custom_route_handler
