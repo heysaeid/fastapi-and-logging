@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastapi-and-logging"
+authors = [
+    {name = "Saeid Noormohammadi", email = "heysaeid92@gmail.com"},
+]
+description = "FastAPI-and-Logging simplifies log handling, allowing for effective organization, tracking, and analysis of logs in FastAPI applications, aiding in debugging and issue resolution."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["fastapi", "fastapi logging", "fastapi and logging"]
+license = {text = "MIT"}
+classifiers = [
+    "Framework :: FastAPI",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "fastapi==0.104.1",
+    "loguru==0.7.2",
+    "user-agents==2.2.0",
+]
+dynamic = ["version"]
