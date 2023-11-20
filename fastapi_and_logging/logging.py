@@ -1,5 +1,5 @@
 import json
-from loguru import FormatFunction, logger
+from loguru import logger
 from fastapi_and_logging.enums import LogTypeEnum
 
 
@@ -18,7 +18,7 @@ def get_incoming_logger(
     enqueue: bool = True, 
     bind_data: dict = {},
     message: str = "Incoming request",
-    format: FormatFunction = incoming_formatter,
+    format = incoming_formatter,
     log_type: LogTypeEnum = LogTypeEnum.FILE,
 ):
     if log_type == LogTypeEnum.FILE:     

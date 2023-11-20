@@ -31,10 +31,10 @@ To use this class, you can create an instance of it and set it as the `route_cla
 
 ```python
 from fastapi import FastAPI
-from your_module import FastAPIIncomingLog
+from fastapi_and_logging import FastAPIIncomingLog
 
 app = FastAPI()
-incoming_log = FastAPIIncomingLog(app)
+FastAPIIncomingLog(app)
 ```
 # Customizing and Using Default Functions
 
