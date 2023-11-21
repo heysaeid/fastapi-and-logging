@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import typing
 import httpx
+from fastapi_and_logging.enums import LogTypeEnum
 from fastapi_and_logging.logging import get_apicall_logger
 
 
@@ -9,6 +10,8 @@ class HTTPXBaseClient(ABC):
     _response_hook: typing.Callable = None
     _request_max_len: int = None
     _response_max_len: int = None
+    _log_path: str = "apicall.log"
+    _log_type: LogTypeEnum = LogTypeEnum.FILE
     
     def __init__(
         self,
@@ -19,7 +22,6 @@ class HTTPXBaseClient(ABC):
         **kwargs
     ):
         super().__init__(*args, **kwargs)
-        breakpoint()
         self.request_id = request_id
         self.request_max_len = request_max_len
         self.response_max_len = response_max_len
@@ -57,7 +59,11 @@ class HTTPXClient(HTTPXBaseClient, httpx.Client):
         if callable(HTTPXClient._response_hook):
             HTTPXClient._response_hook(response, extra_data)
         
-        get_apicall_logger(extra_data=extra_data)
+        get_apicall_logger(
+            file_path=HTTPXClient._log_path,
+            log_type=HTTPXClient._log_type,
+            extra_data=extra_data,
+        )
 
 
 class HTTPXAsyncClient(HTTPXBaseClient, httpx.AsyncClient):
@@ -82,8 +88,11 @@ class HTTPXAsyncClient(HTTPXBaseClient, httpx.AsyncClient):
         if callable(HTTPXAsyncClient._response_hook):
             HTTPXAsyncClient._response_hook(response, extra_data)
         
-        get_apicall_logger(extra_data=extra_data)
-
+        get_apicall_logger(
+            file_path=HTTPXClient._log_path,
+            log_type=HTTPXClient._log_type,
+            extra_data=extra_data,
+        )
 
 class HTTPXLogger:
     
@@ -95,12 +104,16 @@ class HTTPXLogger:
         async_client: bool = True,
         request_max_len: int = 5000,
         response_max_len: int = 5000,
+        log_path: str = "apicall.log",
+        log_type: LogTypeEnum = LogTypeEnum.FILE,
     ):  
         if sync_client:
             HTTPXClient._request_hook = request_hook
             HTTPXClient._response_hook = response_hook
             HTTPXClient._request_max_len = request_max_len
             HTTPXClient._response_max_len = response_max_len
+            HTTPXClient._log_path = log_path
+            HTTPXClient._log_type = log_type
             httpx.Client = HTTPXClient
         
         if async_client:
@@ -108,4 +121,6 @@ class HTTPXLogger:
             HTTPXAsyncClient._response_hook = response_hook
             HTTPXAsyncClient._request_max_len = request_max_len
             HTTPXAsyncClient._response_max_len = response_max_len
+            HTTPXAsyncClient._log_path = log_path
+            HTTPXAsyncClient._log_type = log_type
             httpx.AsyncClient = HTTPXAsyncClient

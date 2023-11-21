@@ -45,12 +45,12 @@ def get_apicall_logger(
     log_type: LogTypeEnum = LogTypeEnum.FILE,
 ):
     if log_type == LogTypeEnum.FILE:     
-        incoming_logger = create_logger(
+        apicall_logger = create_logger(
             name = "apicall",
             file_path = file_path,
             enqueue = enqueue,
             format = format,
         )
-        incoming_logger.bind(data=extra_data).info(message)
+        apicall_logger.bind(data=extra_data).info(message)
     elif log_type == LogTypeEnum.CONSOLE:
         logger.info({"message":message, "data":extra_data})

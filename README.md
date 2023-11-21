@@ -111,6 +111,8 @@ You can easily log all apicalls using httpx by adding the HTTPXLogger class.
 - `async_client (optional)`: A boolean value indicating whether the logging functionality should be applied to asynchronous HTTP clients. If True, the hooks and configuration will be set for asynchronous clients. Defaults to True.
 - `request_max_len (optional)`: An integer specifying the maximum length of the request body to be logged. If the request body exceeds this length, it will be truncated. Defaults to 5000 .
 - `response_max_len (optional)`: An integer specifying the maximum length of the response body to be logged. If the response body exceeds this length, it will be truncated. Defaults to 5000.
+- `log_path (optional)`: Log file path.
+- `log_type (optional)`: Specifies the type of logging, currently it takes two values: console and file.
 
 ## How to Use:
 
