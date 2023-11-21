@@ -23,6 +23,7 @@ This `FastAPIIncomingLog` class is designed to log incoming system requests usin
 - `get_request_data`: A function used to retrieve request information.
 - `get_response_data`: A function used to retrieve response information.
 - `response_max_len`: The maximum length of a response stored in the log (default is 5000).
+- `log_path (optional)`: Log file path.
 - `log_type`: The type of logging, which can be one of various types (default is LogTypeEnum.FILE).
 
 ## How to Use:

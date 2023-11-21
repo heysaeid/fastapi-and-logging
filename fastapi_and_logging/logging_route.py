@@ -14,6 +14,7 @@ class LoggingRoute(APIRoute):
     get_request_data: Callable[..., Coroutine]
     get_response_data: Callable
     log_builder: Callable
+    log_path: str
     log_type: LogTypeEnum
             
     def get_route_handler(self) -> Callable:
@@ -40,7 +41,11 @@ class LoggingRoute(APIRoute):
                 end_time = end_time,
                 duration = duration,
             )
-            get_incoming_logger(extra_data=log_dict, log_type=LoggingRoute.log_type)
+            get_incoming_logger(
+                file_path=LoggingRoute.log_path,
+                log_type=LoggingRoute.log_type,
+                extra_data=log_dict, 
+            )
             return response
         
         return custom_route_handler

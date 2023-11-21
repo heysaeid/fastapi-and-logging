@@ -19,6 +19,7 @@ class FastAPIIncomingLog:
         get_request_data = get_request_data,
         get_response_data = get_response_data,
         response_max_len: int = 5000,
+        log_path: str = "incoming.log",
         log_type: LogTypeEnum = LogTypeEnum.FILE,
     ) -> None:
         self.app = app
@@ -27,5 +28,6 @@ class FastAPIIncomingLog:
         LoggingRoute.get_request_data = get_request_data
         LoggingRoute.get_response_data = get_response_data
         LoggingRoute.log_builder = log_builder
+        LoggingRoute.log_path = log_path
         LoggingRoute.log_type = log_type
         self.app.router.route_class = LoggingRoute
