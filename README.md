@@ -96,3 +96,36 @@ def customize_log_builder(
     data = log_builder(**)
     return data
 ```
+
+# APICallLog
+
+**Note**: Currently it only supports httpx.
+
+You can easily log all apicalls using httpx by adding the HTTPXLogger class.
+
+## Parameters:
+
+- `request_hook (optional)`: A callable object that serves as a hook for capturing and logging HTTP requests. It takes a single parameter, the request object, and does not return any value. Defaults to None..
+- `response_hook (optional)`: A callable object that acts as a hook to capture and log HTTP responses. Any value returned will be logged.
+- `sync_client (optional)`: A boolean value indicating whether the logging functionality should be applied to synchronous HTTP clients. If True, the hooks and configuration will be set for synchronous clients. Defaults to True.
+- `async_client (optional)`: A boolean value indicating whether the logging functionality should be applied to asynchronous HTTP clients. If True, the hooks and configuration will be set for asynchronous clients. Defaults to True.
+- `request_max_len (optional)`: An integer specifying the maximum length of the request body to be logged. If the request body exceeds this length, it will be truncated. Defaults to 5000 .
+- `response_max_len (optional)`: An integer specifying the maximum length of the response body to be logged. If the response body exceeds this length, it will be truncated. Defaults to 5000.
+
+## How to Use:
+
+```python
+from fastapi import FastAPI
+import httpx
+from fastapi_and_logging.http_clients import HTTPXLogger
+
+
+app = FastAPI()
+HTTPXLogger()
+
+
+@app.get("/")
+def index():
+    with httpx.Client() as client:
+        response = client.get("http://localhost:8000/path")
+```
