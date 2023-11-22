@@ -67,14 +67,16 @@ class HTTPXClient(HTTPXBaseClient, httpx.Client):
 
 
 class HTTPXAsyncClient(HTTPXBaseClient, httpx.AsyncClient):
+    _request_hook: typing.Callable[..., typing.Coroutine] = None
+    _response_hook: typing.Callable[..., typing.Coroutine] = None
     
-    def request_hook(self, request: httpx.Request) -> None:
+    async def request_hook(self, request: httpx.Request) -> None:
         if callable(HTTPXAsyncClient._request_hook):
             HTTPXAsyncClient._request_hook(request, self.request_id)
     
-    def response_hook(self, response: httpx.Response) -> None:
+    async def response_hook(self, response: httpx.Response) -> None:
         request_max_len = self.request_max_len if self.request_max_len else HTTPXClient._request_max_len
-        response_max_len = self.response_max_len if self.response_max_len else HTTPXClient._response_max_len
+        response_max_len = self.response_max_len if self.response_max_len else HTTPXClient._response_max_len        
         
         extra_data = {
             "request_id": self.request_id,
@@ -82,7 +84,7 @@ class HTTPXAsyncClient(HTTPXBaseClient, httpx.AsyncClient):
             "url": response.request.url,
             "status_code": response.status_code,
             "request_data": str(response.request.content)[:request_max_len],
-            "response_data": str(response.read())[:response_max_len],
+            "response_data": str(await response.aread())[:response_max_len],
         }
         
         if callable(HTTPXAsyncClient._response_hook):
@@ -98,8 +100,8 @@ class HTTPXLogger:
     
     def __init__(
         self,
-        request_hook: typing.Callable = None, 
-        response_hook: typing.Callable = None,
+        request_hook: typing.Union[typing.Callable, typing.Callable[..., typing.Coroutine]] = None,
+        response_hook: typing.Union[typing.Callable, typing.Callable[..., typing.Coroutine]] = None,
         sync_client: bool = True,
         async_client: bool = True,
         request_max_len: int = 5000,
