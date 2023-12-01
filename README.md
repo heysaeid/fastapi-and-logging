@@ -100,11 +100,12 @@ def customize_log_builder(
 
 # APICallLog
 
-**Note**: Currently it only supports httpx.
+**Note**: Currently it only supports httpx and aiohttp.
 
+## HTTPXLogger
 You can easily log all apicalls using httpx by adding the HTTPXLogger class.
 
-## Parameters:
+### Parameters:
 
 - `request_hook (optional)`: A callable object that serves as a hook for capturing and logging HTTP requests. It takes a single parameter, the request object, and does not return any value. Defaults to None..
 - `response_hook (optional)`: A callable object that acts as a hook to capture and log HTTP responses. Any value returned will be logged.
@@ -115,7 +116,7 @@ You can easily log all apicalls using httpx by adding the HTTPXLogger class.
 - `log_path (optional)`: Log file path.
 - `log_type (optional)`: Specifies the type of logging, currently it takes two values: console and file.
 
-## How to Use:
+### How to Use:
 
 ```python
 from fastapi import FastAPI
@@ -131,4 +132,58 @@ HTTPXLogger()
 def index():
     with httpx.Client() as client:
         response = client.get("http://localhost:8000/path")
+```
+
+
+## AioHttpLogger
+You can easily log all apicalls using httpx by adding the AioHttpLogger class.
+
+### Parameters:
+
+- `request_hook (optional)`: A callable object that serves as a hook for capturing and logging HTTP requests. It takes a single parameter, the request object, and does not return any value. Defaults to None..
+- `response_hook (optional)`: A callable object that acts as a hook to capture and log HTTP responses. Any value returned will be logged.
+- `request_max_len (optional)`: An integer specifying the maximum length of the request body to be logged. If the request body exceeds this length, it will be truncated. Defaults to 5000 .
+- `response_max_len (optional)`: An integer specifying the maximum length of the response body to be logged. If the response body exceeds this length, it will be truncated. Defaults to 5000.
+- `log_path (optional)`: Log file path.
+- `log_type (optional)`: Specifies the type of logging, currently it takes two values: console and file.
+
+### How to Use:
+
+```python
+from fastapi import FastAPI
+import httpx
+from fastapi_and_logging.http_clients import AioHttpLogger
+
+
+app = FastAPI()
+AioHttpLogger()
+
+
+@app.get("/")
+def index():
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            "http://localhost:8000/path", 
+        ) as response:
+            ...
+```
+
+To be able to have the request data or request ID associated with the incoming log in the apicall log, you need to follow the following steps. Additionally, you can send your desired parameters to log in the trace_request_ctx as well.
+```python
+from fastapi import Request
+
+
+@app.get("/")
+def index(request: Request):
+    payload = {"name": "FastAPI And Logging"}
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            "http://localhost:8000/path",
+            json = payload,
+            trace_request_ctx = {
+                "request_id": request.state.request_id, 
+                "request_data": payload,
+            } 
+        ) as response:
+            ...
 ```
