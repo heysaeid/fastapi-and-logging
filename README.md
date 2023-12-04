@@ -47,7 +47,7 @@ This function is responsible for extracting and formatting request data.
 
 ```python
 from fastapi_and_logging import Request
-from fastapi_and_logging.helpers import get_request_data
+from fastapi_and_logging.fastapi import get_request_data
 
 
 async def customize_get_request_data(request: Request):
@@ -63,7 +63,7 @@ This function handles the processing of response data.
 
 ```python
 from fastapi import Response
-from fastapi_and_logging.helpers import get_response_data
+from fastapi_and_logging.fastapi import get_response_data
 
 
 def customize_get_response_data(response: Response) -> dict | str:
@@ -80,7 +80,7 @@ The log_builder function constructs the log data based on various parameters.
 ```python
 from fastapi import Request, Response
 from user_agents.parsers import UserAgent
-from fastapi_and_logging.helpers import log_builder
+from fastapi_and_logging.fastapi import log_builder
 
 
 def customize_log_builder(

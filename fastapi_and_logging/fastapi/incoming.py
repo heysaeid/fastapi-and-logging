@@ -1,7 +1,10 @@
 import json
-from fastapi import Request, Response
+from fastapi import FastAPI, Request, Response
 from fastapi.responses import StreamingResponse
 from user_agents.parsers import UserAgent
+from fastapi_and_logging.enums import LogTypeEnum
+from .route import LoggingRoute
+
 
 
 async def get_request_data(request: Request):
@@ -12,8 +15,7 @@ async def get_request_data(request: Request):
         except Exception as e:
             return ""
     return ""
-    
-    
+
 def get_response_data(response: Response) -> dict | str:
     response_max_len = 1000
     
@@ -30,7 +32,6 @@ def get_response_data(response: Response) -> dict | str:
         response_data = "StreamingResponse"
     
     return response_data
-
 
 def log_builder(
     request: Request,
@@ -59,3 +60,27 @@ def log_builder(
         "os": f"{user_agent.os.family}:{user_agent.os.version_string}",
         "device": user_agent.device.family,
     }
+
+
+class FastAPIIncomingLog:
+    
+    def __init__(
+        self, 
+        app: FastAPI,
+        request_id_builder = None,
+        log_builder = log_builder,
+        get_request_data = get_request_data,
+        get_response_data = get_response_data,
+        response_max_len: int = 5000,
+        log_path: str = "incoming.log",
+        log_type: LogTypeEnum = LogTypeEnum.FILE,
+    ) -> None:
+        self.app = app
+        LoggingRoute.response_max_len = response_max_len
+        LoggingRoute.request_id_builder = request_id_builder
+        LoggingRoute.get_request_data = get_request_data
+        LoggingRoute.get_response_data = get_response_data
+        LoggingRoute.log_builder = log_builder
+        LoggingRoute.log_path = log_path
+        LoggingRoute.log_type = log_type
+        self.app.router.route_class = LoggingRoute

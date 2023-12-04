@@ -1,5 +1,4 @@
-from .incoming import FastAPIIncomingLog
-from .logging_route import LoggingRoute
+from .fastapi import FastAPIIncomingLog, LoggingRoute
 from .enums import LogTypeEnum
 from .logging import create_logger
 
