@@ -1,6 +1,10 @@
 # fastapi-and-logging
 ![FastAPI And Logging](https://raw.githubusercontent.com/heysaeid/fastapi-and-logging/main/docs/img/Color%20logo%20with%20background.svg)
 
+[![Package version](https://img.shields.io/pypi/v/fastapi-and-logging?color=%2334D058&label=pypi%20package)](https://pypi.org/project/fastapi-and-logging/)
+[![Downloads](https://img.shields.io/pypi/dm/fastapi-and-logging)](https://pypi.org/project/fastapi-and-logging/)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/fastapi-and-logging.svg?color=%2334D058)](https://pypi.org/project/fastapi-and-logging/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/heysaeid/fastapi-and-logging/blob/master/LICENSE)
 
 FastAPI-and-Logging simplifies log handling, allowing for effective organization, tracking, and analysis of logs in FastAPI applications, aiding in debugging and issue resolution.
 
