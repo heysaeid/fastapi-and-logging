@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-and-logging"
-version = "0.0.3"
+version = "0.0.4"
 description = "FastAPI-and-Logging simplifies log handling, allowing for effective organization, tracking, and analysis of logs in FastAPI applications, aiding in debugging and issue resolut"
 authors = ["Saeid Noormohammadi <heysaeid92@gmail.com>"]
 license = "MIT"
