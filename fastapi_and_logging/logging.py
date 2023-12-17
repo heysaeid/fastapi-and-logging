@@ -55,21 +55,21 @@ def get_apicall_logger(
     elif log_type == LogTypeEnum.CONSOLE:
         logger.info({"message":message, "data":extra_data})
         
-def error_formatter(record: dict):
+def exception_formatter(record: dict):
     record["extra"]["serialized"] = json.dumps(record["extra"]["data"], default=str)
     return "{extra[serialized]}\n"
 
-def get_error_logger(
-    file_path: str = "error.log", 
+def get_exception_logger(
+    file_path: str = "exception.log", 
     enqueue: bool = True, 
     extra_data: dict = {},
-    message: str = "Error",
-    format = error_formatter,
+    message: str = "Exception",
+    format = exception_formatter,
     log_type: LogTypeEnum = LogTypeEnum.FILE,
 ):
     if log_type == LogTypeEnum.FILE:     
         error_logger = create_logger(
-            name = "error",
+            name = "exception.log",
             file_path = file_path,
             enqueue = enqueue,
             format = format,
