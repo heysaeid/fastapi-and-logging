@@ -4,8 +4,8 @@ from fastapi import Request, Response
 from fastapi.routing import APIRoute
 from user_agents.parsers import parse
 from fastapi_and_logging.enums import LogTypeEnum
+from fastapi_and_logging.fastapi.exception import ExceptionLogger
 from fastapi_and_logging.logging import get_incoming_logger
-
 
 
 class LoggingRoute(APIRoute): 
@@ -25,8 +25,16 @@ class LoggingRoute(APIRoute):
             request.state.request_id = request_id
             start_time = time.time()
             
-            response = await original_route_handler(request)
-            
+            try:
+                response = await original_route_handler(request)
+            except Exception as exc:
+                exc_name = exc.__class__.__name__
+                handler = ExceptionLogger.exception_handlers.get(exc_name) or ExceptionLogger.exception_handlers.get("Exception")
+                if handler:
+                    response = await handler(request, exc)
+                else:
+                    raise exc
+                
             end_time = time.time()
             duration = (end_time - start_time) * 1000
             
