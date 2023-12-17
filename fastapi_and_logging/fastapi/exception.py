@@ -1,3 +1,4 @@
+import datetime
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi_and_logging.enums import LogTypeEnum
@@ -7,6 +8,7 @@ from fastapi_and_logging.logging import get_exception_logger
 def get_exception_logger_default_values(request: Request) -> dict:
     scope = request.scope
     return {
+        "error_time": str(datetime.datetime.now()),
         "request_id": request.state.request_id,
         "endpoint": scope.get("route").name,
         "path": scope.get("path"),
