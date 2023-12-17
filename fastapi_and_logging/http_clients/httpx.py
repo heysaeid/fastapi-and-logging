@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import typing
 import httpx
-from fastapi_and_logging.enums import LogTypeEnum
+from fastapi_and_logging.enums import LogTypeEnum, LogPathEnum
 from fastapi_and_logging.logging import get_apicall_logger
 
 
@@ -10,7 +10,7 @@ class HTTPXBaseClient(ABC):
     _response_hook: typing.Callable = None
     _request_max_len: int = None
     _response_max_len: int = None
-    _log_path: str = "apicall.log"
+    _log_path: str = LogPathEnum.APICALL
     _log_type: LogTypeEnum = LogTypeEnum.FILE
     
     def __init__(
@@ -106,7 +106,7 @@ class HTTPXLogger:
         async_client: bool = True,
         request_max_len: int = 5000,
         response_max_len: int = 5000,
-        log_path: str = "apicall.log",
+        log_path: str = LogPathEnum.APICALL,
         log_type: LogTypeEnum = LogTypeEnum.FILE,
     ):  
         if sync_client:

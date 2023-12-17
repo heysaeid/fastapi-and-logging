@@ -1,7 +1,7 @@
 import typing
 import aiohttp
 import wrapt
-from fastapi_and_logging.enums import LogTypeEnum
+from fastapi_and_logging.enums import LogTypeEnum, LogPathEnum
 from fastapi_and_logging.logging import get_apicall_logger
 
 
@@ -14,7 +14,7 @@ class AioHttpLogger:
         response_hook: typing.Optional[typing.Callable[..., typing.Coroutine]] = None,
         request_max_len: int = 5000,
         response_max_len: int = 5000,
-        log_path: str = "apicall.log",
+        log_path: str = LogPathEnum.APICALL,
         log_type: LogTypeEnum = LogTypeEnum.FILE,
     ) -> None:
         self.request_hook = request_hook or self.default_request_hook

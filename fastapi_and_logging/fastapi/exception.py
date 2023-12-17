@@ -1,7 +1,7 @@
 import datetime
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
-from fastapi_and_logging.enums import LogTypeEnum
+from fastapi_and_logging.enums import LogTypeEnum, LogPathEnum
 from fastapi_and_logging.logging import get_exception_logger
 
 
@@ -20,7 +20,7 @@ class ExceptionLogger:
     def __init__(
         self, 
         app: FastAPI,
-        log_path: str = "error.log",
+        log_path: str = LogPathEnum.EXCEPTION,
         log_type: LogTypeEnum = LogTypeEnum.FILE,
     ):
         self.log_path = log_path

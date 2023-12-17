@@ -2,7 +2,7 @@ import json
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import StreamingResponse
 from user_agents.parsers import UserAgent
-from fastapi_and_logging.enums import LogTypeEnum
+from fastapi_and_logging.enums import LogPathEnum, LogTypeEnum
 from .route import LoggingRoute
 
 
@@ -72,7 +72,7 @@ class FastAPIIncomingLog:
         get_request_data = get_request_data,
         get_response_data = get_response_data,
         response_max_len: int = 5000,
-        log_path: str = "incoming.log",
+        log_path: str = LogPathEnum.INCOMING,
         log_type: LogTypeEnum = LogTypeEnum.FILE,
     ) -> None:
         self.app = app
