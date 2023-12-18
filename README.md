@@ -9,13 +9,20 @@
 FastAPI-and-Logging simplifies log handling, allowing for effective organization, tracking, and analysis of logs in FastAPI applications, aiding in debugging and issue resolution.
 
 
+Support for:
+- Incoming Logger
+- Exception Logger
+- APICall Logger (HTTPX, AIOHttp, requests (coming soon...))
+- Kafka (coming soon...)
+
+
 # Install
 ```
 pip install fastapi-and-logging
 ```
 
 
-# IncomiongLog
+# Incomiong Logger
 
 This `FastAPIIncomingLog` class is designed to log incoming system requests using FastAPI.
 
@@ -102,7 +109,43 @@ def customize_log_builder(
     return data
 ```
 
-# APICallLog
+# Exception Logger
+To log all exceptions, simply use the ExceptionLogger class.
+
+## Parameters:
+- `app`: It is used to add exception handlers.
+- `log_path (optional)`: Log file path.
+- `log_type`: The type of logging, which can be one of various types (default is LogTypeEnum.FILE).
+- `set_default_handlers`: Whether to set default exception handlers (default: True).
+
+## How to Use:
+```python
+from fastapi import FastAPI
+from fastapi_and_logging import ExceptionLogger
+
+app = FastAPI()
+ExceptionLogger(app)
+```
+
+You can also add your own exception handlers as follows:
+```python
+from fastapi import FastAPI, Request
+from fastapi_and_logging import ExceptionLogger
+
+app = FastAPI(debug=False)
+exception_logger = ExceptionLogger(app=app)
+
+async def test_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        content={"message": "Internal Server Error"},
+    )
+
+exception_logger.add_exception_handler(Exception, test_exception_handler)
+```
+
+
+
+# APICall Logger
 
 **Note**: Currently it only supports httpx and aiohttp.
 

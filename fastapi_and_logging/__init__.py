@@ -1,4 +1,4 @@
-from .fastapi import FastAPIIncomingLog, LoggingRoute
+from .fastapi import FastAPIIncomingLog, LoggingRoute, ExceptionLogger
 from .enums import LogTypeEnum
 from .logging import create_logger
 
@@ -8,4 +8,5 @@ __all__ = [
     "LoggingRoute",
     "LogTypeEnum",
     "create_logger",
+    "ExceptionLogger",
 ]
