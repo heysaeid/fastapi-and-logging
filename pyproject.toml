@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-and-logging"
-version = "0.0.4"
+version = "0.0.5"
 description = "FastAPI-and-Logging simplifies log handling, allowing for effective organization, tracking, and analysis of logs in FastAPI applications, aiding in debugging and issue resolut"
 authors = ["Saeid Noormohammadi <heysaeid92@gmail.com>"]
 license = "MIT"
@@ -15,6 +15,10 @@ python = "^3.7"
 fastapi = "^0.104.1"
 loguru = "^0.7.2"
 user-agents = "^2.2.0"
+httpx = "^0.25.1"
+aiohttp = "^3.9.1"
+wrapt = "^1.16.0"
+
 
 [tool.poetry.group.dev.dependencies]
 fastapi = "^0.100.0"
