@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-and-logging"
-version = "0.0.5"
+version = "0.0.7"
 description = "FastAPI-and-Logging simplifies log handling, allowing for effective organization, tracking, and analysis of logs in FastAPI applications, aiding in debugging and issue resolut"
 authors = ["Saeid Noormohammadi <heysaeid92@gmail.com>"]
 license = "MIT"
@@ -9,21 +9,43 @@ homepage = "https://github.com/heysaeid/fastapi-and-logging"
 repository = "https://github.com/heysaeid/fastapi-and-logging"
 documentation = "https://github.com/heysaeid/fastapi-and-logging"
 keywords = ["fastapi", "fastapi logging", "fastapi and logging"]
+classifiers = [
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+    "Environment :: Web Environment",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
-fastapi = "^0.104.1"
+fastapi = "*"
 loguru = "^0.7.2"
 user-agents = "^2.2.0"
 httpx = "^0.25.1"
 aiohttp = "^3.9.1"
 wrapt = "^1.16.0"
-
-
-[tool.poetry.group.dev.dependencies]
-fastapi = "^0.100.0"
-loguru = "^0.7.2"
-user-agents = "^2.2.0"
+StrEnum = "*"
 
 [build-system]
 requires = ["poetry-core"]
