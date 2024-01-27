@@ -1,13 +1,15 @@
 import datetime
 from typing import Callable
-from fastapi import FastAPI, Request, HTTPException, status
+
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from fastapi_and_logging.enums import LogTypeEnum, LogPathEnum
+
+from fastapi_and_logging.enums import LogPathEnum, LogTypeEnum
 from fastapi_and_logging.logging import get_exception_logger
 
 
 def get_exception_logger_default_values(
-    request: Request, 
+    request: Request,
     status_code: int,
     exc: Exception,
 ) -> dict:
@@ -21,11 +23,12 @@ def get_exception_logger_default_values(
         "status_code": status_code,
     }
 
+
 class ExceptionLogger:
     exception_handlers: dict[Exception, Callable] = {}
-    
+
     def __init__(
-        self, 
+        self,
         app: FastAPI,
         log_path: str = LogPathEnum.EXCEPTION,
         log_type: LogTypeEnum = LogTypeEnum.FILE,
@@ -37,49 +40,50 @@ class ExceptionLogger:
 
         if set_default_handlers:
             self.add_default_exception_handlers()
-        
+
     async def unhandled_exception_handler(
         self,
-        request: Request, 
+        request: Request,
         exc: Exception,
     ):
         get_exception_logger(
-            file_path = self.log_path,
-            log_type = self.log_type,
-            extra_data = {
+            file_path=self.log_path,
+            log_type=self.log_type,
+            extra_data={
                 "error_message": str(exc),
                 **get_exception_logger_default_values(
-                    request = request, 
-                    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    exc = exc,
+                    request=request,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    exc=exc,
                 ),
-            }
+            },
         )
-        return JSONResponse({
-            "detail": "An unexpected error occurred",
-        }, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+        return JSONResponse(
+            {
+                "detail": "An unexpected error occurred",
+            },
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
     async def handle_http_exception(
-        self, 
-        request: Request, 
-        exc: HTTPException
+        self, request: Request, exc: HTTPException
     ):
         get_exception_logger(
-            file_path = self.log_path,
-            log_type = self.log_type,
-            extra_data = {
+            file_path=self.log_path,
+            log_type=self.log_type,
+            extra_data={
                 "error_message": exc.detail,
                 **get_exception_logger_default_values(
-                    request = request, 
-                    status_code = exc.status_code,
-                    exc = exc,
+                    request=request,
+                    status_code=exc.status_code,
+                    exc=exc,
                 ),
-            }
+            },
         )
-        return JSONResponse({
-            "detail": exc.detail
-        }, status_code=exc.status_code)
-        
+        return JSONResponse(
+            {"detail": exc.detail}, status_code=exc.status_code
+        )
+
     def add_exception_handler(
         self,
         exception_class: HTTPException,
@@ -87,14 +91,18 @@ class ExceptionLogger:
     ):
         ExceptionLogger.exception_handlers[exception_class.__name__] = handler
         self.app.add_exception_handler(exception_class, handler)
-        
+
     def add_default_exception_handlers(
         self,
         unhandled_exception: bool = True,
         http_exception: bool = True,
     ) -> None:
         if unhandled_exception:
-            self.add_exception_handler(Exception, self.unhandled_exception_handler)
-            
+            self.add_exception_handler(
+                Exception, self.unhandled_exception_handler
+            )
+
         if http_exception:
-            self.add_exception_handler(HTTPException, self.handle_http_exception)
+            self.add_exception_handler(
+                HTTPException, self.handle_http_exception
+            )

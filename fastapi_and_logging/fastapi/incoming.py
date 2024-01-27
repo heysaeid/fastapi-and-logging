@@ -1,10 +1,12 @@
 import json
+
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import StreamingResponse
 from user_agents.parsers import UserAgent
-from fastapi_and_logging.enums import LogPathEnum, LogTypeEnum
-from .route import LoggingRoute
 
+from fastapi_and_logging.enums import LogPathEnum, LogTypeEnum
+
+from .route import LoggingRoute
 
 
 async def get_request_data(request: Request):
@@ -12,26 +14,28 @@ async def get_request_data(request: Request):
     if len(body) > 0:
         try:
             return json.dumps(await request.body())
-        except Exception as e:
+        except Exception:
             return ""
     return ""
 
+
 def get_response_data(response: Response) -> dict | str:
     response_max_len = 1000
-    
+
     if not isinstance(response, StreamingResponse):
         body = response.body
         if len(body) < response_max_len:
             try:
                 response_data = json.loads(response.body)
-            except Exception as e:
+            except Exception:
                 response_data = str(body)[response_max_len:]
         else:
             response_data = str(body)[response_max_len:]
     else:
         response_data = "StreamingResponse"
-    
+
     return response_data
+
 
 def log_builder(
     request: Request,
@@ -63,14 +67,13 @@ def log_builder(
 
 
 class FastAPIIncomingLog:
-    
     def __init__(
-        self, 
+        self,
         app: FastAPI,
-        request_id_builder = None,
-        log_builder = log_builder,
-        get_request_data = get_request_data,
-        get_response_data = get_response_data,
+        request_id_builder=None,
+        log_builder=log_builder,
+        get_request_data=get_request_data,
+        get_response_data=get_response_data,
         response_max_len: int = 5000,
         log_path: str = LogPathEnum.INCOMING,
         log_type: LogTypeEnum = LogTypeEnum.FILE,
