@@ -43,15 +43,17 @@ class AioHttpLogger:
 
     async def default_response_hook(self, session, trace_config_ctx, params):
         response = params.response
-        request_data = trace_config_ctx.trace_request_ctx.pop(
-            "request_data",
-        )
-        response_data = await response.read()
-
-        extra_data = {
-            "request_id": trace_config_ctx.trace_request_ctx.pop(
+        request_data, request_id = {}, {}
+        if trace_config_ctx.trace_request_ctx:
+            request_data = trace_config_ctx.trace_request_ctx.pop(
+                "request_data", None
+            )
+            request_id = trace_config_ctx.trace_request_ctx.pop(
                 "request_id",
-            ),
+            )
+        response_data = await response.read()
+        extra_data = {
+            "request_id": request_id,
             "method": response.method,
             "url": str(response.url),
             "status_code": response.status,
@@ -60,6 +62,7 @@ class AioHttpLogger:
                 response_data, self.response_max_len
             ),
             "trace_request_ctx": trace_config_ctx.trace_request_ctx,
+            "headers": dict(params.headers),
         }
 
         get_apicall_logger(

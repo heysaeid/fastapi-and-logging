@@ -63,6 +63,7 @@ class HTTPXClient(HTTPXBaseClient, httpx.Client):
             "status_code": response.status_code,
             "request_data": str(response.request.content)[:request_max_len],
             "response_data": str(response.read())[:response_max_len],
+            "headers": dict(response.request.headers),
         }
 
         if callable(HTTPXClient._response_hook):
@@ -102,6 +103,7 @@ class HTTPXAsyncClient(HTTPXBaseClient, httpx.AsyncClient):
             "status_code": response.status_code,
             "request_data": str(response.request.content)[:request_max_len],
             "response_data": str(await response.aread())[:response_max_len],
+            "headers": dict(response.request.headers),
         }
 
         if callable(HTTPXAsyncClient._response_hook):
