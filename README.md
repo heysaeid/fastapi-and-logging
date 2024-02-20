@@ -166,8 +166,8 @@ You can easily log all apicalls using httpx by adding the HTTPXLogger class.
 ### How to Use:
 
 ```python
-from fastapi import FastAPI
 import httpx
+from fastapi import FastAPI
 from fastapi_and_logging.http_clients import HTTPXLogger
 
 
@@ -197,8 +197,8 @@ You can easily log all apicalls using httpx by adding the AioHttpLogger class.
 ### How to Use:
 
 ```python
+import aiohttp
 from fastapi import FastAPI
-import httpx
 from fastapi_and_logging.http_clients import AioHttpLogger
 
 
@@ -207,30 +207,31 @@ AioHttpLogger()
 
 
 @app.get("/")
-def index():
+async def index():
     async with aiohttp.ClientSession() as session:
         async with session.get(
-            "http://localhost:8000/path", 
+            "http://localhost:8000/path",
         ) as response:
             ...
 ```
 
 To be able to have the request data or request ID associated with the incoming log in the apicall log, you need to follow the following steps. Additionally, you can send your desired parameters to log in the trace_request_ctx as well.
 ```python
+import aiohttp
 from fastapi import Request
 
 
 @app.get("/")
-def index(request: Request):
+async def index(request: Request):
     payload = {"name": "FastAPI And Logging"}
     async with aiohttp.ClientSession() as session:
         async with session.post(
             "http://localhost:8000/path",
             json = payload,
             trace_request_ctx = {
-                "request_id": request.state.request_id, 
+                "request_id": request.state.request_id,
                 "request_data": payload,
-            } 
+            }
         ) as response:
             ...
 ```
