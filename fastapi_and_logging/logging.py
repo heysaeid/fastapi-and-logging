@@ -22,11 +22,13 @@ def incoming_formatter(record: dict):
 def get_incoming_logger(
     file_path: str = LogPathEnum.INCOMING,
     enqueue: bool = True,
-    extra_data: dict = {},
+    extra_data: dict = None,
     message: str = "Incoming Request",
     format=incoming_formatter,
     log_type: LogTypeEnum = LogTypeEnum.FILE,
 ):
+    if extra_data is None:
+        extra_data = {}
     if log_type == LogTypeEnum.FILE:
         incoming_logger = create_logger(
             name="incoming",
@@ -49,11 +51,13 @@ def apicall_formatter(record: dict):
 def get_apicall_logger(
     file_path: str = LogPathEnum.APICALL,
     enqueue: bool = True,
-    extra_data: dict = {},
+    extra_data: dict = None,
     message: str = "APICall Request",
     format=apicall_formatter,
     log_type: LogTypeEnum = LogTypeEnum.FILE,
 ):
+    if extra_data is None:
+        extra_data = {}
     if log_type == LogTypeEnum.FILE:
         apicall_logger = create_logger(
             name="apicall",
@@ -76,11 +80,13 @@ def exception_formatter(record: dict):
 def get_exception_logger(
     file_path: str = LogPathEnum.EXCEPTION,
     enqueue: bool = True,
-    extra_data: dict = {},
+    extra_data: dict = None,
     message: str = "Exception",
     format=exception_formatter,
     log_type: LogTypeEnum = LogTypeEnum.FILE,
 ):
+    if extra_data is None:
+        extra_data = {}
     if log_type == LogTypeEnum.FILE:
         error_logger = create_logger(
             name="exception.log",
