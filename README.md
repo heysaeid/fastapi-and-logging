@@ -179,6 +179,13 @@ HTTPXLogger()
 def index():
     with httpx.Client() as client:
         response = client.get("http://localhost:8000/path")
+
+
+# AsyncClient
+@app.get("/")
+async def index():
+    async with httpx.AsyncClient() as client:
+        response = await client.get("http://localhost:8000/path")
 ```
 
 
