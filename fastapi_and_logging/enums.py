@@ -10,3 +10,9 @@ class LogPathEnum(StrEnum):
     INCOMING = "incoming.log"
     APICALL = "apicall.log"
     EXCEPTION = "exception.log"
+
+
+class LoggerNameEnum(StrEnum):
+    INCOMING = "incoming"
+    APICALL = "apicall"
+    EXCEPTION = "exception"

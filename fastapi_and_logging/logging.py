@@ -2,7 +2,7 @@ import json
 
 from loguru import logger
 
-from fastapi_and_logging.enums import LogPathEnum, LogTypeEnum
+from fastapi_and_logging.enums import LoggerNameEnum, LogPathEnum, LogTypeEnum
 
 
 def create_logger(name: str, file_path: str, **kwargs):
@@ -31,7 +31,7 @@ def get_incoming_logger(
         extra_data = {}
     if log_type == LogTypeEnum.FILE:
         incoming_logger = create_logger(
-            name="incoming",
+            name=LoggerNameEnum.INCOMING,
             file_path=file_path,
             enqueue=enqueue,
             format=format,
@@ -60,7 +60,7 @@ def get_apicall_logger(
         extra_data = {}
     if log_type == LogTypeEnum.FILE:
         apicall_logger = create_logger(
-            name="apicall",
+            name=LoggerNameEnum.APICALL,
             file_path=file_path,
             enqueue=enqueue,
             format=format,
@@ -89,7 +89,7 @@ def get_exception_logger(
         extra_data = {}
     if log_type == LogTypeEnum.FILE:
         error_logger = create_logger(
-            name="exception.log",
+            name=LoggerNameEnum.EXCEPTION,
             file_path=file_path,
             enqueue=enqueue,
             format=format,
