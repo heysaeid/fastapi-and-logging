@@ -14,7 +14,9 @@ def create_logger(name: str, file_path: str, **kwargs):
 
 def incoming_formatter(record: dict):
     record["extra"]["serialized"] = json.dumps(
-        record["extra"]["data"], default=str
+        record["extra"]["data"],
+        default=str,
+        ensure_ascii=False,
     )
     return "{extra[serialized]}\n"
 
@@ -43,7 +45,9 @@ def get_incoming_logger(
 
 def apicall_formatter(record: dict):
     record["extra"]["serialized"] = json.dumps(
-        record["extra"]["data"], default=str
+        record["extra"]["data"],
+        default=str,
+        ensure_ascii=False,
     )
     return "{extra[serialized]}\n"
 
@@ -72,7 +76,9 @@ def get_apicall_logger(
 
 def exception_formatter(record: dict):
     record["extra"]["serialized"] = json.dumps(
-        record["extra"]["data"], default=str
+        record["extra"]["data"],
+        default=str,
+        ensure_ascii=False,
     )
     return "{extra[serialized]}\n"
 
